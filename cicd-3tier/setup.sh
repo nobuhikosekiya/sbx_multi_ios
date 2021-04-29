@@ -1,10 +1,9 @@
 #!/usr/bin/env bash
 logfile=cicd-setup.log
-gitlab_host="http://10.10.20.50"
-gitlab_user="developer"
+gitlab_host="http://127.0.0.1"
+gitlab_user="root"
 gitlab_password="C1sco12345"
 repo_name="cicd-3tier"
-gitlab_user="developer"
 
 # create gitlab personal access token
 # https://gist.github.com/michaellihs/5ef5e8dbf48e63e2172a573f7b32c638
@@ -112,7 +111,7 @@ git config --global user.email "developer@devnetsandbox.cisco.com"
 
 echo "Initalizing Local Repository"
 git init
-git remote add origin http://$gitlab_user:$gitlab_password@10.10.20.50/developer/${repo_name}.git
+git remote add origin http://$gitlab_user:$gitlab_password@127.0.0.1/developer/${repo_name}.git
 
 git add .
 git checkout -b test
