@@ -53,11 +53,11 @@ devices:
 
 topology:
   dist-rtr01:
+    interfaces:
       mgmt0:
         ipv4: 10.10.20.175/24
         link: flat
         type: ethernet
-    interfaces:
       GigabitEthernet2:
         ipv4: 172.16.252.21/30
         link: L3 Link to core-rtr01
@@ -75,11 +75,11 @@ topology:
         link: L3 Link to dist-sw02
         type: ethernet
   dist-rtr02:
+    interfaces:
       mgmt0:
         ipv4: 10.10.20.176/24
         link: flat
         type: ethernet
-    interfaces:
       GigabitEthernet2:
         ipv4: 172.16.252.29/30
         link: L3 Link to core-rtr01
