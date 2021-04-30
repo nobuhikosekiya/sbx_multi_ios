@@ -845,6 +845,8 @@ nodes:
       !
       restconf
       !
+      netconf-yang
+      !
       username cisco privilege 15 secret 9 $9$iVecEqVTUJzHUk$EO2BfGoo4I8.wW.QanPw2rSxwy9NJt6kc3xFNEFLYSA
       !
       redundancy
@@ -1135,6 +1137,7 @@ nodes:
       login local
       transport input telnet ssh
       !
+      netconf-yang
       !
       end
     image_definition: csr1000v-161101b
