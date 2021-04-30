@@ -6,6 +6,8 @@ all:
       url: http://localhost:8080/jsonrpc
       username: cisco
       password: cisco
+      ansible_user=cisco
+      ansible_password=cisco
 
   children:
     internetRtr:
