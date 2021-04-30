@@ -91,7 +91,7 @@ echo "Open Sample Issues for Demo"
 
 echo "Initalizing Local Repository"
 git init
-git remote add origin http://$gitlab_user:$gitlab_password@127.0.0.1/developer/${repo_name}.git
+git remote add origin http://$gitlab_user:$gitlab_password@127.0.0.1/root/${repo_name}.git
 
 git add .
 git checkout -b test
