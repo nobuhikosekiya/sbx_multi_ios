@@ -1,0 +1,98 @@
+testbed:
+
+  name: test_default_8MXNX1
+
+  tacacs:
+      # ideally we should pull from env
+      # username: "%ENV{PYATS_USERNAME}"
+
+      # but who needs security???
+      username: cisco
+
+  passwords:
+      # ideally we should pull from env
+      # tacacs: "%ENV{PYATS_PASSWORD}"
+      # enable: "%ENV{PYATS_AUTH_PASS}"
+      # line: "%ENV{PYATS_PASSWORD}"
+
+      # but who needs security???
+      tacacs: cisco
+
+devices:
+  dist-rtr01:
+    alias: dist-rtr01
+    os: iosxe
+    type: CSR1000v
+    connections:
+
+      defaults:
+        class: unicon.Unicon
+      ssh:
+        ip: 10.10.20.175
+        protocol: ssh
+
+    custom:
+      abstraction:
+        order: [os, type]
+
+  dist-rtr02:
+    alias: dist-rtr02
+    os: iosxe
+    type: CSR1000v
+    connections:
+
+      defaults:
+        class: unicon.Unicon
+      ssh:
+        ip: 10.10.20.176
+        protocol: ssh
+
+    custom:
+      abstraction:
+        order: [os, type]
+
+topology:
+  dist-rtr01:
+      mgmt0:
+        ipv4: 10.10.20.175/24
+        link: flat
+        type: ethernet
+    interfaces:
+      GigabitEthernet2:
+        ipv4: 172.16.252.21/30
+        link: L3 Link to core-rtr01
+        type: ethernet
+      GigabitEthernet3:
+        ipv4: 172.16.252.25/30
+        link: L3 Link to core-rtr02
+        type: ethernet
+      GigabitEthernet4:
+        ipv4: 172.16.252.2/30
+        link: L3 Link to dist-sw01
+        type: ethernet
+      GigabitEthernet5:
+        ipv4: 172.16.252.10/30
+        link: L3 Link to dist-sw02
+        type: ethernet
+  dist-rtr02:
+      mgmt0:
+        ipv4: 10.10.20.176/24
+        link: flat
+        type: ethernet
+    interfaces:
+      GigabitEthernet2:
+        ipv4: 172.16.252.29/30
+        link: L3 Link to core-rtr01
+        type: ethernet
+      GigabitEthernet3:
+        ipv4: 172.16.252.33/30
+        link: L3 Link to core-rtr02
+        type: ethernet
+      GigabitEthernet4:
+        ipv4: 172.16.252.6/30
+        link: L3 Link to dist-sw01
+        type: ethernet
+      GigabitEthernet5:
+        ipv4: 172.16.252.14/30
+        link: L3 Link to dist-sw02
+        type: ethernet

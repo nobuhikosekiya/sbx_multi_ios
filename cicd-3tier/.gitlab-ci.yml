@@ -1,24 +1,29 @@
 stages:
   - validate
+#  - deploy_to_test
+#  - deploy_to_prod
   - deploy_to_test
-  - deploy_to_prod
+  - test
   - verify_deploy_to_test
-  - verify_deploy_to_prod
+#  - verify_deploy_to_prod
 
 lint:
   stage: validate
-  image: kecorbin/ansible:devel
+  #image: kecorbin/ansible:devel
+  image: ansible-runner:0.3
   script:
-    - ansible-playbook --syntax-check -i inventory/dev.yaml site.yaml
-    - ansible-playbook --syntax-check -i inventory/test.yaml site.yaml
-    - ansible-playbook --syntax-check -i inventory/prod.yaml site.yaml
+#    - ansible-playbook --syntax-check -i inventory/dev.yaml site.yaml
+#    - ansible-playbook --syntax-check -i inventory/test.yaml site.yaml
+#    - ansible-playbook --syntax-check -i inventory/prod.yaml site.yaml
+    - ansible-playbook --syntax-check -i inventory/cml-sandbox.yaml site_addLoopback100.yaml
 
 deploy_to_test:
-  image: kecorbin/ansible:devel
+  #image: kecorbin/ansible:devel
+  image: ansible-runner:0.3
   stage: deploy_to_test
   script:
-    - echo "Deploy to test env"
-    - ansible-playbook -i inventory/test.yaml site.yaml
+    - echo "Deploy to cml env"
+    - ansible-playbook -i inventory/cml-sandbox.yaml site_addLoopback100.yaml
   environment:
     name: test
   only:
@@ -36,7 +41,7 @@ validate_test_environment:
     - cd tests
     # important: need to add our current directory to PYTHONPATH
     - export PYTHONPATH=$PYTHONPATH:$(pwd)
-    - robot --noncritical noncritical --variable testbed:./test_testbed.yml validation_tasks.robot
+    - robot --noncritical noncritical --variable testbed:./cml_testbed.yml cml_validation_tasks.robot
 
   artifacts:
       name: "pyats_robot_logs_${CI_JOB_NAME}_${CI_COMMIT_REF_NAME}"
@@ -46,37 +51,3 @@ validate_test_environment:
         - ./tests/report.html
         - ./tests/output.xml
 
-deploy_to_prod:
-  image: kecorbin/ansible:devel
-  stage: deploy_to_prod
-  script:
-    - echo "Deploy to prod env"
-    - ansible-playbook -i inventory/prod.yaml site.yaml
-  environment:
-    name: production
-  only:
-    - production
-  when: manual
-  allow_failure: false
-  only:
-  - production
-
-validate_prod_environment:
-  image: ciscotestautomation/pyats:latest-robot
-  stage: verify_deploy_to_prod
-  dependencies:
-    - deploy_to_prod
-  only:
-    - production
-  script:
-    - pwd
-    - cd tests
-    - export PYTHONPATH=$PYTHONPATH:$(pwd)
-    - robot --noncritical noncritical --variable testbed:./prod_testbed.yml validation_tasks.robot
-  artifacts:
-      name: "${CI_JOB_NAME}_${CI_COMMIT_REF_NAME}"
-      when: always
-      paths:
-        - ./tests/log.html
-        - ./tests/report.html
-        - ./tests/output.xml
