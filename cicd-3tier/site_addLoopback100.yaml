@@ -1,0 +1,12 @@
+- name: Push new configurations to devices
+  hosts: iosxe
+  vars:
+        ansible_connection: netconf
+        ansible_network_os: default
+  gather_facts: no
+
+  tasks:
+    - name: Create a loopback Loopback100 with NETCONF
+      netconf_config:
+        content: |
+          {{ config }}

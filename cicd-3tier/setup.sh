@@ -44,33 +44,13 @@ success () {
 # installing telnet if not present
 # sudo yum install -y telnet
 
-echo "Launching VIRL simulations (prod+test) ... "
+echo "Launching CML simulations ... "
 root_dir=$(pwd)
-cd $root_dir/virl/test
+cd $root_dir/cml
 virl up --provision > /dev/null &
 TEST=$!
-cd $root_dir/virl/prod
-virl up --provision &
-PROD=$!
-wait $TEST $PROD
+wait $TEST
 cd $root_dir
-
-echo "Launching NSO ... "
-ncs-setup --dest .
-ncs
-
-
-echo "Importing Test network to NSO .. "
-cd $root_dir/virl/test
-virl generate nso 2>&1
-
-
-echo "Importing Prod network to NSO"
-cd $root_dir/virl/prod
-virl generate nso 2>&1
-
-echo "Performing initial sync of devices..."
-echo "devices sync-from" | ncs_cli -u admin -C
 
 echo "Creating Repo on Gitlab"
 cd $root_dir
@@ -105,9 +85,9 @@ curl -s --header "PRIVATE-TOKEN: $personal_access_token" -d "name=Security&color
 echo "Open Sample Issues for Demo"
 ./open_issues.py ${gitlab_host} ${personal_access_token} ${project_id} ${user_id} issues_list.csv 2>&1 >> $logfile
 
-echo "Configure Git"
-git config --global user.name "developer"
-git config --global user.email "developer@devnetsandbox.cisco.com"
+#echo "Configure Git"
+#git config --global user.name "developer"
+#git config --global user.email "developer@devnetsandbox.cisco.com"
 
 echo "Initalizing Local Repository"
 git init
@@ -124,11 +104,11 @@ git push -u origin production
 git checkout test
 
 echo "Test Network Summary"
-cd $root_dir/virl/test
+cd $root_dir/cml
 virl ls
 virl nodes
 
-echo "Production Network Summary"
-cd $root_dir/virl/prod
-virl ls
-virl nodes
+echo "build Ansible container image"
+cd $root_dir/ansible
+sh build.sh
+

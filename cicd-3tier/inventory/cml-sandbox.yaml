@@ -1,0 +1,36 @@
+
+all:
+  vars:
+    device:
+      ip: localhost
+      url: http://localhost:8080/jsonrpc
+      username: cisco
+      password: cisco
+
+  children:
+    internetRtr:
+      hosts:
+
+        internet-rtr01:
+          oob_mgmt_ip: 10.10.20.181
+
+    core:
+      hosts:
+
+        core-rtr01:
+          oob_mgmt_ip: 10.10.20.173
+
+        core-rtr02:
+          oob_mgmt_ip: 10.10.20.174
+
+    iosxe:
+      hosts:
+
+        dist-rtr01: 
+          ansible_host: 10.10.20.175
+          oob_mgmt_ip: 10.10.20.175
+
+        dist-rtr02: 
+          ansible_host: 10.10.20.176
+          oob_mgmt_ip: 10.10.20.176
+
